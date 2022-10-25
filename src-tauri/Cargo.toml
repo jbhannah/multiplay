@@ -2,9 +2,9 @@
 name = "multiplay"
 version = "0.0.0"
 description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+authors = ["Jesse Brooklyn Hannah"]
+license = "MIT"
+repository = "https://github.com/jbhannah/multiplay"
 edition = "2021"
 rust-version = "1.57"
 
