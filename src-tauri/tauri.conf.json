@@ -1,13 +1,13 @@
 {
   "build": {
-    "beforeDevCommand": "yarn dev",
     "beforeBuildCommand": "yarn build",
+    "beforeDevCommand": "yarn dev",
     "devPath": "http://localhost:1420",
     "distDir": "../dist",
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "multiplay",
+    "productName": "Multiplay",
     "version": "0.0.0"
   },
   "tauri": {
@@ -16,8 +16,8 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
+      "category": "Game",
+      "copyright": "© 2022 Jesse Brooklyn Hannah",
       "deb": {
         "depends": []
       },
@@ -29,7 +29,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "net.jbhannah.apps.multiplay",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -58,7 +58,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "multiplay",
+        "title": "Multiplay",
         "width": 800
       }
     ]
