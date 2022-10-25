@@ -1,11 +1,18 @@
-import { signal } from "@preact/signals";
+import { Signal, signal } from "@preact/signals";
 import { createContext, FunctionalComponent } from "preact";
 
 export class Settings {
-  name: String = "";
+  name: Signal<String> = signal("");
+  paths: Signal<String[]> = signal([]);
+
+  addPaths(paths: String | String[]) {
+    this.paths.value = Array.isArray(paths)
+      ? [...this.paths.value, ...paths]
+      : [...this.paths.value, paths];
+  }
 }
 
-const settings = signal(new Settings());
+const settings = new Settings();
 
 export const SettingsContext = createContext(settings);
 

@@ -9,8 +9,8 @@ export const Greeter: FunctionalComponent = () => {
   const [greetMsg, setGreetMsg] = useState("");
 
   const greet = async () => {
-    console.debug(settings.value);
-    setGreetMsg(await invoke("greet", { name: settings.value.name }));
+    console.debug(settings);
+    setGreetMsg(await invoke("greet", { name: settings.name.value }));
   };
 
   return (

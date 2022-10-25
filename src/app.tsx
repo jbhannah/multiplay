@@ -1,6 +1,7 @@
 import "./app.css";
 import preactLogo from "./assets/preact.svg";
 import { Greeter } from "./components/greeter";
+import { Paths } from "./components/paths";
 import { SettingsProvider } from "./contexts/settings";
 
 export const App = () => {
@@ -23,6 +24,7 @@ export const App = () => {
 
       <SettingsProvider>
         <Greeter />
+        <Paths />
       </SettingsProvider>
     </div>
   );

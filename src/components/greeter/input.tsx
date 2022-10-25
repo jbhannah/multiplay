@@ -8,7 +8,7 @@ export const GreeterInput: FunctionalComponent = () => {
   return (
     <input
       id="greet-input"
-      onChange={(e) => (settings.value.name = e.currentTarget.value)}
+      onChange={(e) => (settings.name.value = e.currentTarget.value)}
       placeholder="Enter a name..."
     />
   );
