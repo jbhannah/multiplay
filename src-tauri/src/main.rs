@@ -6,7 +6,10 @@
 use std::{fs::create_dir_all, sync::Mutex};
 
 use diesel::{prelude::*, Connection, SqliteConnection};
-use tauri::{api::dir::read_dir, AppHandle, Manager, State};
+use tauri::{
+    api::dir::{read_dir, DiskEntry},
+    AppHandle, Manager, State,
+};
 
 #[derive(Default)]
 struct Library {
@@ -22,14 +25,31 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-fn add_path(path: &str, recursive: bool, app_handle: AppHandle, library: State<Library>) -> String {
-    let paths = read_dir(path, recursive).unwrap();
-
-    paths
+fn add_path(
+    path: &str,
+    recursive: bool,
+    _app_handle: AppHandle,
+    _library: State<Library>,
+) -> Vec<String> {
+    read_dir(path, recursive)
+        .unwrap()
         .iter()
-        .map(|path| path.path.to_str().unwrap().to_owned())
+        .filter_map(check_if_rom)
+        .map(|entry| entry.path.to_str().unwrap().to_owned())
         .collect::<Vec<String>>()
-        .join("\n")
+}
+
+fn check_if_rom(entry: &DiskEntry) -> Option<&DiskEntry> {
+    match entry.path.extension() {
+        Some(ext) => match ext.to_str() {
+            Some("gb") => Some(entry),
+            Some("gbc") => Some(entry),
+            Some("gba") => Some(entry),
+            Some("nds") => Some(entry),
+            _ => None,
+        },
+        _ => None,
+    }
 }
 
 fn main() {
