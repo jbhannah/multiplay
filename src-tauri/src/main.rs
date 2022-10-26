@@ -6,7 +6,7 @@
 use std::{fs::create_dir_all, sync::Mutex};
 
 use diesel::{prelude::*, Connection, SqliteConnection};
-use tauri::Manager;
+use tauri::{api::dir::read_dir, AppHandle, Manager, State};
 
 #[derive(Default)]
 struct Library {
@@ -19,6 +19,17 @@ const LIBRARY_FILENAME: &str = "library.sqlite";
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
+}
+
+#[tauri::command]
+fn add_path(path: &str, recursive: bool, app_handle: AppHandle, library: State<Library>) -> String {
+    let paths = read_dir(path, recursive).unwrap();
+
+    paths
+        .iter()
+        .map(|path| path.path.to_str().unwrap().to_owned())
+        .collect::<Vec<String>>()
+        .join("\n")
 }
 
 fn main() {
@@ -36,7 +47,7 @@ fn main() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![add_path, greet])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

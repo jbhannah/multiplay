@@ -3,13 +3,6 @@ import { createContext, FunctionalComponent } from "preact";
 
 export class Settings {
   name: Signal<String> = signal("");
-  paths: Signal<String[]> = signal([]);
-
-  addPaths(paths: String | String[]) {
-    this.paths.value = Array.isArray(paths)
-      ? [...this.paths.value, ...paths]
-      : [...this.paths.value, paths];
-  }
 }
 
 const settings = new Settings();

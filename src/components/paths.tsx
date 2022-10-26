@@ -1,4 +1,5 @@
 import { open } from "@tauri-apps/api/dialog";
+import { invoke } from "@tauri-apps/api/tauri";
 import { useContext } from "preact/hooks";
 import { SettingsContext } from "../contexts/settings";
 
@@ -10,9 +11,15 @@ export const Paths = () => {
       directory: true,
     });
 
-    if (selected) settings.addPaths(selected);
+    if (!selected) return;
 
-    console.debug(settings);
+    const output = Array.isArray(selected)
+      ? selected.forEach(async (path) => {
+          await invoke("add_path", { path, recursive: false });
+        })
+      : await invoke("add_path", { path: selected, recursive: false });
+
+    console.debug(output);
   };
 
   return (
@@ -20,11 +27,6 @@ export const Paths = () => {
       <button type="button" onClick={addPath}>
         Add path
       </button>
-      <ul>
-        {settings.paths.value.map((path) => (
-          <li key={path}>{path}</li>
-        ))}
-      </ul>
     </>
   );
 };
