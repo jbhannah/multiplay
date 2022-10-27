@@ -3,13 +3,19 @@
     windows_subsystem = "windows"
 )]
 
+mod models;
+mod schema;
+
 use std::{fs::create_dir_all, sync::Mutex};
 
 use diesel::{prelude::*, Connection, SqliteConnection};
+use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use tauri::{
     api::dir::{read_dir, DiskEntry},
     AppHandle, Manager, State,
 };
+
+pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("./migrations");
 
 #[derive(Default)]
 struct Library {
@@ -60,10 +66,14 @@ fn main() {
             create_dir_all(app_dir.clone()).expect("could not create app data directory");
 
             let library_path = app_dir.join(LIBRARY_FILENAME);
-            *(app.state::<Library>()).db.lock().unwrap() = Some(
-                SqliteConnection::establish(library_path.to_str().unwrap())
-                    .expect("could not open library database"),
-            );
+            let mut connection = SqliteConnection::establish(library_path.to_str().unwrap())
+                .expect("could not open library database");
+
+            connection
+                .run_pending_migrations(MIGRATIONS)
+                .expect("could not run migrations");
+
+            *(app.state::<Library>()).db.lock().unwrap() = Some(connection);
 
             Ok(())
         })
