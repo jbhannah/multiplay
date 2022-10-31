@@ -1,7 +1,34 @@
-# Tauri + Preact + Typescript
+# Multiplay
 
-This template should help get you started developing with Tauri, Preact and Typescript in Vite.
+A cross-platform, multi-platform ROM manager and launcher.
 
-## Recommended IDE Setup
+## Supported ROM types
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+- Game Boy
+- Game Boy Color
+- Game Boy Advance
+- Nintendo DS
+
+## Development
+
+### Requirements
+
+See the [Prerequisites][prerequisites] page in the Tauri "Getting Started"
+guide, plus:
+
+- Node v18.x
+- Yarn
+
+### Running
+
+```bash
+yarn tauri dev
+```
+
+## Copyright
+
+Copyright © 2022 by Jesse Brooklyn Hannah. Licensed under the terms of the
+[MIT License][mit].
+
+[prerequisites]: https://tauri.app/v1/guides/getting-started/prerequisites
+[mit]: https://github.com/jbhannah/multiplay/blob/trunk/LICENSE
