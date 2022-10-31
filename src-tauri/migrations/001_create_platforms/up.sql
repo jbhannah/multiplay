@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS platforms (
-    id INT PRIMARY KEY,
-    name TEXT,
-    acronym TEXT,
-    rom_extensions TEXT,
-    save_extensions TEXT
+    id INT PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
+    acronym TEXT NOT NULL,
+    rom_extensions TEXT NOT NULL,
+    save_extensions TEXT NOT NULL
 );
 INSERT INTO platforms
 VALUES (1, "Game Boy", "GB", "gb", "sav"),

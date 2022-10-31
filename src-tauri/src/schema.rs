@@ -2,21 +2,21 @@
 
 diesel::table! {
     games (id) {
-        id -> Nullable<Integer>,
-        name -> Nullable<Text>,
-        path -> Nullable<Text>,
-        platform_id -> Nullable<Integer>,
-        shasum -> Nullable<Text>,
+        id -> Integer,
+        name -> Text,
+        path -> Text,
+        platform_id -> Integer,
+        shasum -> Text,
     }
 }
 
 diesel::table! {
     platforms (id) {
-        id -> Nullable<Integer>,
-        name -> Nullable<Text>,
-        acronym -> Nullable<Text>,
-        rom_extensions -> Nullable<Text>,
-        save_extensions -> Nullable<Text>,
+        id -> Integer,
+        name -> Text,
+        acronym -> Text,
+        rom_extensions -> Text,
+        save_extensions -> Text,
     }
 }
 
