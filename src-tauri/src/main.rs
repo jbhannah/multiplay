@@ -3,23 +3,21 @@
     windows_subsystem = "windows"
 )]
 
+mod library;
 mod models;
 mod schema;
 
 use std::{fs::create_dir_all, sync::Mutex};
 
-use diesel::{prelude::*, Connection, SqliteConnection};
-use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
+use library::Library;
 use tauri::{
     api::dir::{read_dir, DiskEntry},
     AppHandle, Manager, State,
 };
 
-pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("./migrations");
-
 #[derive(Default)]
-struct Library {
-    db: Mutex<Option<SqliteConnection>>,
+struct MultiplayState {
+    library: Mutex<Option<Library>>,
 }
 
 const LIBRARY_FILENAME: &str = "library.sqlite";
@@ -35,7 +33,7 @@ fn add_path(
     path: &str,
     recursive: bool,
     _app_handle: AppHandle,
-    _library: State<Library>,
+    _app_state: State<MultiplayState>,
 ) -> Vec<String> {
     read_dir(path, recursive)
         .unwrap()
@@ -60,20 +58,14 @@ fn check_if_rom(entry: &DiskEntry) -> Option<&DiskEntry> {
 
 fn main() {
     tauri::Builder::default()
-        .manage(Library::default())
+        .manage(MultiplayState::default())
         .setup(|app| {
             let app_dir = app.path_resolver().app_dir().unwrap();
             create_dir_all(app_dir.clone()).expect("could not create app data directory");
 
             let library_path = app_dir.join(LIBRARY_FILENAME);
-            let mut connection = SqliteConnection::establish(library_path.to_str().unwrap())
-                .expect("could not open library database");
-
-            connection
-                .run_pending_migrations(MIGRATIONS)
-                .expect("could not run migrations");
-
-            *(app.state::<Library>()).db.lock().unwrap() = Some(connection);
+            *(app.state::<MultiplayState>()).library.lock().unwrap() =
+                Library::new(library_path.to_str().unwrap()).ok();
 
             Ok(())
         })
